@@ -7,13 +7,15 @@ use Yii;
 /**
  * This is the model class for table "stops".
  *
- * @property int $id
- * @property string $name
+ * @property int $stop_id
+ * @property string $stop_name
  * @property float|null $latitude
  * @property float|null $longitude
  *
  * @property RouteStops[] $routeStops
  * @property Routes[] $routes
+ * @property Routes[] $routes0
+ * @property Schedule[] $schedules
  */
 class Stops extends \yii\db\ActiveRecord
 {
@@ -31,9 +33,9 @@ class Stops extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['stop_name'], 'required'],
             [['latitude', 'longitude'], 'number'],
-            [['name'], 'string', 'max' => 255],
+            [['stop_name'], 'string', 'max' => 100],
         ];
     }
 
@@ -43,8 +45,8 @@ class Stops extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
+            'stop_id' => 'Stop ID',
+            'stop_name' => 'Stop Name',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
         ];
@@ -57,7 +59,7 @@ class Stops extends \yii\db\ActiveRecord
      */
     public function getRouteStops()
     {
-        return $this->hasMany(RouteStops::class, ['stop_id' => 'id']);
+        return $this->hasMany(RouteStops::class, ['stop_id' => 'stop_id']);
     }
 
     /**
@@ -67,6 +69,26 @@ class Stops extends \yii\db\ActiveRecord
      */
     public function getRoutes()
     {
-        return $this->hasMany(Routes::class, ['end_stop_id' => 'id']);
+        return $this->hasMany(Routes::class, ['start_stop_id' => 'stop_id']);
+    }
+
+    /**
+     * Gets query for [[Routes0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRoutes0()
+    {
+        return $this->hasMany(Routes::class, ['end_stop_id' => 'stop_id']);
+    }
+
+    /**
+     * Gets query for [[Schedules]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSchedules()
+    {
+        return $this->hasMany(Schedule::class, ['stop_id' => 'stop_id']);
     }
 }

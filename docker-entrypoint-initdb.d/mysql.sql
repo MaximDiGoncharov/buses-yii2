@@ -4,7 +4,13 @@ CREATE TABLE buses (
     bus_number VARCHAR(10) NOT NULL,
     capacity INT NOT NULL
 );
-
+-- Таблица остановок
+CREATE TABLE stops (
+    stop_id SERIAL PRIMARY KEY,
+    stop_name VARCHAR(100) NOT NULL,
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6)
+);
 -- Таблица маршрутов
 CREATE TABLE routes (
     route_id SERIAL PRIMARY KEY,
@@ -14,13 +20,7 @@ CREATE TABLE routes (
     end_stop_id INT REFERENCES stops(stop_id)
 );
 
--- Таблица остановок
-CREATE TABLE stops (
-    stop_id SERIAL PRIMARY KEY,
-    stop_name VARCHAR(100) NOT NULL,
-    latitude DECIMAL(9,6),
-    longitude DECIMAL(9,6)
-);
+
 
 -- Промежуточная таблица для связи маршрутов и остановок
 CREATE TABLE route_stops (

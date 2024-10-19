@@ -2,68 +2,76 @@
 
 namespace app\models;
 
-use yii\base\Model;
-use yii\data\ActiveDataProvider;
-use app\models\Routes;
+use Yii;
 
 /**
- * RouteStops represents the model behind the search form of `app\models\Routes`.
+ * This is the model class for table "route_stops".
+ *
+ * @property int $route_stop_id
+ * @property int|null $route_id
+ * @property int|null $stop_id
+ * @property int $sequence_number
+ * @property string|null $direction
+ *
+ * @property Routes $route
+ * @property Stops $stop
  */
-class RouteStops extends Routes
+class RouteStops extends \yii\db\ActiveRecord
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'route_stops';
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'end_stop_id'], 'integer'],
-            [['name'], 'safe'],
+            [['route_id', 'stop_id', 'sequence_number'], 'default', 'value' => null],
+            [['route_id', 'stop_id', 'sequence_number'], 'integer'],
+            [['sequence_number'], 'required'],
+            [['direction'], 'string', 'max' => 10],
+            [['route_id'], 'exist', 'skipOnError' => true, 'targetClass' => Routes::class, 'targetAttribute' => ['route_id' => 'route_id']],
+            [['stop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Stops::class, 'targetAttribute' => ['stop_id' => 'stop_id']],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function attributeLabels()
     {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
+        return [
+            'route_stop_id' => 'Route Stop ID',
+            'route_id' => 'Route ID',
+            'stop_id' => 'Stop ID',
+            'sequence_number' => 'Sequence Number',
+            'direction' => 'Direction',
+        ];
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Gets query for [[Route]].
      *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
+     * @return \yii\db\ActiveQuery
      */
-    public function search($params)
+    public function getRoute()
     {
-        $query = Routes::find();
+        return $this->hasOne(Routes::class, ['route_id' => 'route_id']);
+    }
 
-        // add conditions that should always apply here
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'end_stop_id' => $this->end_stop_id,
-        ]);
-
-        $query->andFilterWhere(['ilike', 'name', $this->name]);
-
-        return $dataProvider;
+    /**
+     * Gets query for [[Stop]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStop()
+    {
+        return $this->hasOne(Stops::class, ['stop_id' => 'stop_id']);
     }
 }

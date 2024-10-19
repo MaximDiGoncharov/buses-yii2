@@ -76,8 +76,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $res = (new Query())->select('*')->from('bus_schedules')->all();
-        return $this->render('index', ['res'=>$res]);
+        return $this->render('index');
     }
 
     /**

@@ -46,7 +46,7 @@ class RouteStopsController extends Controller
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'id' => SORT_DESC,
+                    'route_stop_id' => SORT_DESC,
                 ]
             ],
             */
@@ -59,14 +59,14 @@ class RouteStopsController extends Controller
 
     /**
      * Displays a single RouteStops model.
-     * @param int $id ID
+     * @param int $route_stop_id Route Stop ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($route_stop_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($route_stop_id),
         ]);
     }
 
@@ -81,7 +81,7 @@ class RouteStopsController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'route_stop_id' => $model->route_stop_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -95,16 +95,16 @@ class RouteStopsController extends Controller
     /**
      * Updates an existing RouteStops model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
+     * @param int $route_stop_id Route Stop ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($route_stop_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($route_stop_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'route_stop_id' => $model->route_stop_id]);
         }
 
         return $this->render('update', [
@@ -115,13 +115,13 @@ class RouteStopsController extends Controller
     /**
      * Deletes an existing RouteStops model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
+     * @param int $route_stop_id Route Stop ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($route_stop_id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($route_stop_id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -129,13 +129,13 @@ class RouteStopsController extends Controller
     /**
      * Finds the RouteStops model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
+     * @param int $route_stop_id Route Stop ID
      * @return RouteStops the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($route_stop_id)
     {
-        if (($model = RouteStops::findOne(['id' => $id])) !== null) {
+        if (($model = RouteStops::findOne(['route_stop_id' => $route_stop_id])) !== null) {
             return $model;
         }
 

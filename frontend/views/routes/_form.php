@@ -12,7 +12,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'route_name')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'direction')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'start_stop_id')->textInput() ?>
 
     <?= $form->field($model, 'end_stop_id')->textInput() ?>
 

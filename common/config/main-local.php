@@ -4,7 +4,7 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'pgsql:host=buses-pgsql-1;port=5432;dbname=yii2advanced',
+            'dsn' => 'pgsql:host=buses-yii2-pgsql-1;port=5432;dbname=yii2advanced',
             'username' => 'yii2advanced',
             'password' => 'secret',
             'charset' => 'utf8',

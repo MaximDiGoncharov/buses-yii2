@@ -7,13 +7,16 @@ use Yii;
 /**
  * This is the model class for table "routes".
  *
- * @property int $id
- * @property string $name
+ * @property int $route_id
+ * @property string $route_name
+ * @property string|null $direction
+ * @property int|null $start_stop_id
  * @property int|null $end_stop_id
  *
- * @property BusSchedules[] $busSchedules
  * @property Stops $endStop
  * @property RouteStops[] $routeStops
+ * @property Stops $startStop
+ * @property Trips[] $trips
  */
 class Routes extends \yii\db\ActiveRecord
 {
@@ -31,11 +34,13 @@ class Routes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['end_stop_id'], 'default', 'value' => null],
-            [['end_stop_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
-            [['end_stop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Stops::class, 'targetAttribute' => ['end_stop_id' => 'id']],
+            [['route_name'], 'required'],
+            [['start_stop_id', 'end_stop_id'], 'default', 'value' => null],
+            [['start_stop_id', 'end_stop_id'], 'integer'],
+            [['route_name'], 'string', 'max' => 50],
+            [['direction'], 'string', 'max' => 10],
+            [['start_stop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Stops::class, 'targetAttribute' => ['start_stop_id' => 'stop_id']],
+            [['end_stop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Stops::class, 'targetAttribute' => ['end_stop_id' => 'stop_id']],
         ];
     }
 
@@ -45,20 +50,12 @@ class Routes extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
+            'route_id' => 'Route ID',
+            'route_name' => 'Route Name',
+            'direction' => 'Direction',
+            'start_stop_id' => 'Start Stop ID',
             'end_stop_id' => 'End Stop ID',
         ];
-    }
-
-    /**
-     * Gets query for [[BusSchedules]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBusSchedules()
-    {
-        return $this->hasMany(BusSchedules::class, ['route_id' => 'id']);
     }
 
     /**
@@ -68,7 +65,7 @@ class Routes extends \yii\db\ActiveRecord
      */
     public function getEndStop()
     {
-        return $this->hasOne(Stops::class, ['id' => 'end_stop_id']);
+        return $this->hasOne(Stops::class, ['stop_id' => 'end_stop_id']);
     }
 
     /**
@@ -78,6 +75,26 @@ class Routes extends \yii\db\ActiveRecord
      */
     public function getRouteStops()
     {
-        return $this->hasMany(RouteStops::class, ['route_id' => 'id']);
+        return $this->hasMany(RouteStops::class, ['route_id' => 'route_id']);
+    }
+
+    /**
+     * Gets query for [[StartStop]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStartStop()
+    {
+        return $this->hasOne(Stops::class, ['stop_id' => 'start_stop_id']);
+    }
+
+    /**
+     * Gets query for [[Trips]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrips()
+    {
+        return $this->hasMany(Trips::class, ['route_id' => 'route_id']);
     }
 }
