@@ -6,6 +6,7 @@ $params = array_merge(
     require __DIR__ . '/params-local.php'
 );
 
+
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
@@ -40,7 +41,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-            ],
+                '/api/find-bus'=>'buses/custom-find'
+            ]
         ],
     ],
     'params' => $params,

@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Route Stops';
+$this->title = 'Остановки маршрута';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="route-stops-index">

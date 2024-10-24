@@ -7,6 +7,12 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use Yii;
+use yii\db\Query;
+use yii\db\yiidbExpression;
+
+
 
 /**
  * BusesController implements the CRUD actions for Buses model.
@@ -140,5 +146,46 @@ class BusesController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionCustomFind()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = Yii::$app->db->createCommand("
+SELECT 
+    stops.stop_id,
+    stops.stop_name,
+    buses.bus_id,
+    buses.bus_number,
+    routes.start_stop_id,
+    routes.end_stop_id,
+    routes.direction,
+    schedule.arrival_time,
+    schedule.departure_time
+FROM 
+    route_stops 
+JOIN 
+    stops ON route_stops.stop_id = stops.stop_id
+JOIN 
+    trips ON route_stops.route_id = trips.route_id
+JOIN 
+    buses ON buses.bus_id = trips.bus_id
+JOIN 
+    routes ON routes.route_id = route_stops.route_id
+JOIN 
+    schedule ON schedule.stop_id = stops.stop_id
+WHERE 
+    routes.direction = 'backward'
+ORDER BY 
+    buses.bus_id, 
+    schedule.arrival_time
+          ")
+            ->queryAll();
+        return $model;
+        // $start = 2;
+        // $stop=5;
+        // $model = Buses::find()->innerJoin();
+        // $model =  Buses::find()->asArray()->all();
+        // return $model;
     }
 }

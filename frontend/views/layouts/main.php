@@ -38,12 +38,13 @@ AppAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
         // ['label' => 'About', 'url' => ['/site/about']],
         // ['label' => 'Contact', 'url' => ['/site/contact']],
-        ['label' => 'Buses', 'url' => ['/buses']],
-        ['label' => 'Routes', 'url' => ['/routes']],
-        ['label' => 'Route Stops', 'url' => ['/route-stops']],
-        ['label' => 'Schedule', 'url' => ['/schedule']],
-        ['label' => 'Stops', 'url' => ['/stops']],
-        ['label' => 'Trips', 'url' => ['/trips']],
+        ['label' => 'Автобусы', 'url' => ['/buses']],
+        ['label' => 'Маршруты', 'url' => ['/routes']],
+        ['label' => 'Остановки маршрута', 'url' => ['/route-stops']],
+        ['label' => 'Расписание', 'url' => ['/schedule']],
+        ['label' => 'Остановки', 'url' => ['/stops']],
+        ['label' => 'Путешествия', 'url' => ['/trips']],
+        ['label' => 'api/find-bus', 'url' => ['/buses/custom-find']],
     ];
     // uncomment for signup
     // if (Yii::$app->user->isGuest) {
